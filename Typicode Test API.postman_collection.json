@@ -1,0 +1,335 @@
+{
+	"info": {
+		"_postman_id": "27712fed-fcab-4fb4-8b83-44ef87fa0c58",
+		"name": "Typicode Test API",
+		"description": "This collection, Typicode Test API, provides a set of endpoints to interact with a typical blog post and comments API. It allows users to create, retrieve, update, and delete blog posts, as well as fetch comments related to posts. The API supports various HTTP methods including GET, POST, PUT, PATCH, and DELETE to perform CRUD operations on posts and to retrieve comments with filtering options.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "48790337",
+		"_collection_link": "https://ummashara-4367833.postman.co/workspace/05ac17e0-6a7c-4712-85ec-0f5ea931116c/collection/48790337-27712fed-fcab-4fb4-8b83-44ef87fa0c58?action=share&source=collection_link&creator=48790337"
+	},
+	"item": [
+		{
+			"name": "Blog",
+			"item": [
+				{
+					"name": "GET",
+					"item": [
+						{
+							"name": "/posts",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseURL}}/posts",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"posts"
+									]
+								},
+								"description": "Retrieves a list of all blog posts. Use this endpoint to fetch all posts available in the blog. Supports optional query parameters for filtering and pagination, making it useful for displaying posts in a feed or dashboard."
+							},
+							"response": []
+						},
+						{
+							"name": "/posts/{post_id}",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "1",
+										"value": "",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{baseURL}}/posts/{{post_id}}",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"posts",
+										"{{post_id}}"
+									]
+								},
+								"description": "Retrieves the details of a single blog post identified by its unique post_id. Use this endpoint to fetch information such as the title, content, author, and other metadata for a specific post. Useful for displaying or editing a particular blog post."
+							},
+							"response": []
+						},
+						{
+							"name": "/posts/{post_id}/comments",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseURL}}/posts/{{post_id}}/comments?cgpa=3.8&year=2023&limit=20",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"posts",
+										"{{post_id}}",
+										"comments"
+									],
+									"query": [
+										{
+											"key": "cgpa",
+											"value": "3.8"
+										},
+										{
+											"key": "year",
+											"value": "2023"
+										},
+										{
+											"key": "limit",
+											"value": "20"
+										}
+									]
+								},
+								"description": "Retrieves a list of comments associated with a specific blog post, identified by post_id. This endpoint supports filtering options via query parameters such as cgpa, year, and limit, allowing users to narrow down the results. Useful for displaying or analyzing feedback on a particular post."
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "POST",
+					"item": [
+						{
+							"name": "/posts",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"try {",
+											"    var body = pm.request.body.raw;",
+											"    var jsonBody = JSON.parse(body);",
+											"    if (!jsonBody.hasOwnProperty('userId')) {",
+											"        throw new Error(\"Request body must contain 'userId'\");",
+											"    }",
+											"} catch (e) {",
+											"    throw new Error(\"Invalid JSON body or missing 'userId': \" + e.message);",
+											"}"
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"userId in request body matches userId in response body\", function () {",
+											"    var requestBody = pm.request.body.raw;",
+											"    var responseBody = pm.response.text();",
+											"    try {",
+											"        var requestJson = JSON.parse(requestBody);",
+											"        var responseJson = pm.response.json();",
+											"        pm.expect(requestJson.userId).to.eql(responseJson.userId);",
+											"    } catch (e) {",
+											"        pm.test(\"Parsing error\", function () {",
+											"            throw new Error(\"Failed to parse JSON in request or response body: \" + e.message);",
+											"        });",
+											"    }",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"userId\": 1,\r\n    \"title\": \"my post\",\r\n    \"body\": \"content body\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseURL}}/posts",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"posts"
+									]
+								},
+								"description": "Creates a new blog post. Use this endpoint to add a new post to the blog by providing the required fields (such as title, content, and author) in the request body. The server will return the details of the newly created post, including its unique post_id."
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "PUT",
+					"item": [
+						{
+							"name": "/posts/{post_id}",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "1",
+										"value": "",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"id\": 1,\r\n    \"title\": \"my post\",\r\n    \"body\": \"i want to show this comments\",\r\n    \"userId\": 1\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseURL}}/posts/{{post_id}}",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"posts",
+										"{{post_id}}"
+									]
+								},
+								"description": "Replaces an existing blog post identified by its unique post_id with new data. Use this endpoint to update all fields of a post. The request body must contain the complete set of fields for the post, as any missing fields may be removed. Useful for making comprehensive updates to a post."
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "PATCH",
+					"item": [
+						{
+							"name": "/posts/{post_id}",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "1",
+										"value": "",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"title\": \"my post\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseURL}}/posts/{{post_id}}",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"posts",
+										"{{post_id}}"
+									]
+								},
+								"description": "Partially updates a blog post identified by its unique post_id. Use this endpoint to modify one or more fields of an existing post without replacing the entire resource. Only the fields provided in the request body will be updated. Useful for making quick edits to a post, such as updating the title or content."
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "DELETE",
+					"item": [
+						{
+							"name": "/posts/{post_id}",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "1",
+										"value": "",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{baseURL}}/posts/{{post_id}}",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"posts",
+										"{{post_id}}"
+									]
+								},
+								"description": "Deletes a blog post identified by its unique post_id. Use this endpoint to permanently remove a post from the blog. This action cannot be undone, so ensure that the correct post_id is specified before making the request."
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Comments",
+			"item": [
+				{
+					"name": "GET",
+					"item": [
+						{
+							"name": "/comments",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseURL}}/comments",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"comments"
+									],
+									"query": [
+										{
+											"key": "postId",
+											"value": "1",
+											"disabled": true
+										}
+									]
+								},
+								"description": "Retrieves all comments across all blog posts. This endpoint returns a list of comments and can be used to display or analyze feedback from users on various posts. No filtering is applied by default, but query parameters can be added for advanced use cases."
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "baseURL",
+			"value": "",
+			"type": "default"
+		},
+		{
+			"key": "post_id",
+			"value": "",
+			"type": "default"
+		},
+		{
+			"key": "{post_id",
+			"value": "",
+			"type": "default"
+		}
+	]
+}
