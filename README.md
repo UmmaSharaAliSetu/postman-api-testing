@@ -66,10 +66,6 @@ The Typicode Test API collection is designed to help developers and testers quic
 
 - **Method:** `GET`
 - **URL:** `/posts/{post_id}/comments`
-- **Query Parameters:**  
-  - `cgpa` (optional): Filter comments by CGPA  
-  - `year` (optional): Filter comments by year  
-  - `limit` (optional): Limit the number of comments returned
 - **Description:**  
   Retrieves comments associated with a specific blog post. Supports filtering and limiting results.
 
