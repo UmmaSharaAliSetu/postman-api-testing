@@ -93,4 +93,4 @@ The Typicode Test API collection is designed to help developers and testers quic
 
 ## License
 
-This project is for demonstration and testing purposes.s
+This project is for demonstration and testing purposes.
